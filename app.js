@@ -8,6 +8,7 @@ import { seno } from './funciones/seno.js';
 import { potencia } from './funciones/potencia.js';
 import { minimo } from './funciones/minimo.js';
 import { log } from './funciones/log.js';
+import { exponenciacion } from './funciones/exponenciacion.js';
 
 document.addEventListener("DOMContentLoaded", () => {
 
@@ -95,6 +96,17 @@ function calcular() {
    
     resultado = log(v1, v2)
   
+  } else if (op === "exponenciacion") {
+
+    const res = exponenciacion(v1, v2);
+
+    if (!res.ok) {
+      alert(res.error);
+      return;
+    }
+
+    resultado = res.valor;
+
   } else {
     alert("Operación no válida");
     return;
