@@ -21,9 +21,16 @@ document.addEventListener("DOMContentLoaded", () => {
   // Mostrar u ocultar Valor 2 según la operación
   function actualizarCampos() {
     const esSeno = operacion.value === "seno";
+    const esRaiz = operacion.value === "raiz";
 
     valor2.hidden = esSeno;
     labelValor2.hidden = esSeno;
+
+    if (esRaiz) {
+      valor2.placeholder = "Opcional (por defecto 2)";
+    } else {
+      valor2.placeholder = "";
+    }
   }
 
   // Actualizar los campos al cambiar de operación
@@ -50,7 +57,7 @@ function calcular() {
   }
 
   // El seno solamente necesita el primer valor
-  if (op !== "seno" && isNaN(v2)) {
+  if (op !== "seno" && op !== "raiz" && isNaN(v2)) {
     alert("Ingrese un valor válido para Valor 2");
     return;
   }
@@ -70,7 +77,14 @@ function calcular() {
     resultado = multiplicacion(v1, v2);
 
   } else if (op === "raiz") {
-    resultado = raiz(v1, v2);
+    const res = raiz(v1, isNaN(v2) ? undefined : v2);
+
+    if (!res.ok) {
+      alert(res.error);
+      return;
+    }
+
+    resultado = res.valor;
 
   } else if (op === "division") {
 

@@ -1,17 +1,27 @@
 export function raiz(a, b = 2) {
+  const indice = (typeof b === 'object' && b !== null)
+    ? (b.indice ?? (b.exponente ? 1 / b.exponente : 2))
+    : (b === undefined || isNaN(b) ? 2 : b);
 
-  if (a < 0 && b % 2 === 0) {
+  const onError = (typeof b === 'object' && typeof b?.onError === 'function')
+    ? b.onError
+    : (msg) => console.error(`[Error Raíz]: ${msg}`);
 
-    return "Error: No se puede calcular la raíz par de un número negativo";
-
+  if (indice === 0) {
+    const error = "El índice de la raíz no puede ser 0.";
+    onError(error);
+    return { ok: false, valor: null, error };
   }
 
-  if (b === 0) {
-
-    return "Error: El índice de la raíz no puede ser 0";
-
+  if (a < 0 && indice % 2 === 0) {
+    const error = "No existe raíz real par de un número negativo.";
+    onError(error);
+    return { ok: false, valor: null, error };
   }
 
-  return Math.pow(a, 1 / b);
+  const valor = a < 0
+    ? -Math.pow(-a, 1 / indice)
+    : Math.pow(a, 1 / indice);
 
+  return { ok: true, valor, error: null };
 }
